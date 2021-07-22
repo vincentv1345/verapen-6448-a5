@@ -1,0 +1,66 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+class Main{
+    main()
+    start()
+}
+class InventoryController{
+Item = item(Value, SerialNumber, Name);
+removeItem();
+addItem();
+}
+class EditController{
+editSerialNumber(checkItemInput)
+editValue()
+editName(2,256)
+}
+class ItemClass{
+private String value;
+private String serialNumber;
+private String name;
+public Item(int value, String serialNumber, String name)
+getValue();
+setValue(dollarFormat);
+getSerialNum(checkItemInput);
+setSerialNum();
+getName();
+setName(between 2,256);
+checkName();
+}
+class SearchClass{
+searchByName()
+searchBySerialNumber()
+}
+class SaveLoadController{
+ choice()
+ SaveLoadFiles saveAsTSV()
+ SaveLoadFiles saveAsHTML()
+ SaveLoadFiles saveAsJSON()
+}
+class CheckErrors{
+public void checkItemInput()
+for(all itemsInInventory){
+if{itemSerialNumber == enterNumber}
+return errorMessage}
+}
+class SortItems{
+sortByName()
+sortBySerialNumber()
+sortByValue()
+}
+class SaveLoadFiles{
+saveAsJSON(nameOfFile)
+saveAsHTML(nameOfFile)
+saveAsTSV(nameOfFile)
+load()
+}
+javafx.Main - Main
+Main <|- InventoryController
+InventoryController <|- ItemClass
+InventoryController <|- SaveLoadController
+InventoryController <|- CheckErrors
+InventoryController <|- EditController
+SaveLoadController <|- SaveLoadFiles
+InventoryController <|- SearchClass
+InventoryController <|- SortItems
+@enduml
