@@ -1,37 +1,39 @@
 package ucf.assignments;
 
-public class Item {
-    private int value;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
 
-    public int getValue() {
+public class Item {
+    private SimpleStringProperty serialNumber;
+    private SimpleStringProperty name;
+    private SimpleStringProperty value;
+    public SimpleStringProperty getValue() {
         return value;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setValue(String value) {
+        this.value.setValue(value);
     }
 
-    public String getSerialNumber() {
+    public SimpleStringProperty getSerialNumber() {
         return serialNumber;
     }
 
     public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+        this.serialNumber.set(serialNumber);
     }
 
-    public String getName() {
+    public SimpleStringProperty getName() {
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
-    private String serialNumber;
-    private String name;
-    public Item(int value, String serialNumber, String name){
-        this.value = value;
-        this.serialNumber = serialNumber;
-        this.name = name;
+    public Item(String value, String serialNumber, String name){
+        this.value = new SimpleStringProperty(value);
+        this.serialNumber = new SimpleStringProperty(serialNumber);
+        this.name = new SimpleStringProperty(name);
     }
 }
