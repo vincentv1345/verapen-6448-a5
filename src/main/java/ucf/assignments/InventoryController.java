@@ -1,4 +1,5 @@
 package ucf.assignments;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -92,8 +93,11 @@ public class InventoryController implements Initializable {
         }
     }
     @FXML
+    public void close(ActionEvent event){
+        Platform.exit();
+    }
+    @FXML
     void loadFile(ActionEvent actionEvent){
-
         Stage saveStage = new Stage();
         fileChooser.setTitle("Load File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
