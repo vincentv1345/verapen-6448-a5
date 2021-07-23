@@ -2,29 +2,36 @@ package ucf.assignments;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.TextField;
 
-public class Item {
+public class Item extends TextField {
     private SimpleStringProperty serialNumber;
     private SimpleStringProperty name;
     private SimpleStringProperty value;
-    public SimpleStringProperty getValue() {
+    public String getValue() {
+        return value.get();
+    }
+    public SimpleStringProperty valueProperty(){
         return value;
     }
-
     public void setValue(String value) {
         this.value.setValue(value);
     }
 
-    public SimpleStringProperty getSerialNumber() {
+    public String getSerialNumber() {
+        return serialNumber.get();
+    }
+    public SimpleStringProperty serialNumberProperty(){
         return serialNumber;
     }
-
     public void setSerialNumber(String serialNumber) {
         this.serialNumber.set(serialNumber);
     }
-
-    public SimpleStringProperty getName() {
+    public SimpleStringProperty nameProperty(){
         return name;
+    }
+    public String getName() {
+        return name.getName();
     }
 
     public void setName(String name) {

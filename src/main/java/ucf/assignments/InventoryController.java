@@ -1,5 +1,4 @@
 package ucf.assignments;
-
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,12 +8,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import javafx.scene.control.TextField;
 import java.awt.*;
-import java.awt.TextField;
+import javafx.stage.DirectoryChooser;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,10 +27,6 @@ import java.util.ResourceBundle;
 public class InventoryController implements Initializable {
     @FXML
     private AnchorPane anchorPane;
-    @FXML
-    private TextField Directory;
-    @FXML
-    private Button setDirectory;
     @FXML
     private TableView<Item> Tableview;
     @FXML
@@ -45,12 +41,6 @@ public class InventoryController implements Initializable {
     private TextField name;
     @FXML
     private TextField serialNumber;
-    @FXML
-    private Button addItemButton;
-    @FXML String setDirectory(MouseEvent event){
-        String getDirectory = Directory.getText();
-        return getDirectory;
-    }
     FileChooser fileChooser = new FileChooser();
     List<String> fileNames;
 
@@ -71,11 +61,15 @@ public class InventoryController implements Initializable {
         try{
             ObservableList<Item> Item = Tableview.getItems();
             Item inventoryItem = new Item(value.getText(), serialNumber.getText(), name.getText());
-
+            Tableview.getItems().add(inventoryItem);
         }
         catch (Exception e){
             e.printStackTrace();
         }
+    }
+    @FXML
+    public void removeButton(ActionEvent event){
+
     }
     @FXML
     private void handleButtonEvent(ActionEvent event){
@@ -89,11 +83,17 @@ public class InventoryController implements Initializable {
     }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        valueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("Value"));
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("Name"));
-        serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("Serial Number"));
+
+        valueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("value"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
+        serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
         Tableview.setItems(getItems());
-        
+        Tableview.setEditable(true);
+        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        Tableview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         fileNames = new ArrayList<>();
         fileNames.add(" *.txt");
         fileNames.add("*.json");
