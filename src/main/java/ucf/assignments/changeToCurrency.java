@@ -5,7 +5,7 @@ import javafx.scene.control.Alert;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class changeToCurrency extends InventoryController{
+public class changeToCurrency{
     public String changeToCurrency(String x){
         try {
             double value = Double.parseDouble(x);

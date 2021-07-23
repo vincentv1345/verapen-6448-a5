@@ -55,32 +55,37 @@ public class InventoryController implements Initializable {
         Alert nameSize = new Alert(alertType, "The name is either too small or too big");
         Alert isEmpty = new Alert(alertType, "The field is empty");
         ObservableList<Item> tempList = Tableview.getItems();
-        for(int i = 0; i<tempList.size(); i++) {
-            if(tempList.get(i).getSerialNumber() == serialNumber.getText()){
-                serialNumberIsTheSame.showAndWait();
-            }
-            else if(name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()){
-                isEmpty.showAndWait();
-            }
-            else if(name.getText().length() > 256 || name.getText().length() < 2){
-                nameSize.showAndWait();
-            }
-
-            else {
-                changeToCurrency c = new changeToCurrency();
-                ObservableList<Item> Item = Tableview.getItems();
-                Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
-                Tableview.getItems().add(inventoryItem);
+        try {
+            for (int i = 0; i < tempList.size(); i++) {
+                if (tempList.get(i).getSerialNumber() == serialNumber.getText()) {
+                    serialNumberIsTheSame.showAndWait();
+                } else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()) {
+                    isEmpty.showAndWait();
+                } else if (name.getText().length() > 256 || name.getText().length() < 2) {
+                    nameSize.showAndWait();
+                } else {
+                    changeToCurrency c = new changeToCurrency();
+                    ObservableList<Item> Item = Tableview.getItems();
+                    Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
+                    Tableview.getItems().add(inventoryItem);
+                }
             }
         }
+        catch(Exception e){
+            e.printStackTrace();
+            }
     }
     @FXML
     void saveFile(ActionEvent actionEvent){
 
         Stage saveStage = new Stage();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Files", fileNames));
+        fileChooser.setTitle("Save File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Html Files", "*.html"));
         try{
             File file = fileChooser.showSaveDialog(saveStage);
+            fileChooser.setInitialDirectory(file.getParentFile());
         }
         catch (Exception e){
             e.printStackTrace();
@@ -123,10 +128,5 @@ public class InventoryController implements Initializable {
         serialNumberColumn.setCellFactory(TextFieldTableCell.forTableColumn());
 
         Tableview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        fileNames = new ArrayList<>();
-        fileNames.add("*.txt");
-        fileNames.add("*.json");
-        fileNames.add("*.html");
-
     }
 }
