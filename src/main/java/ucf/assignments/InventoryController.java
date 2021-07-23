@@ -69,7 +69,11 @@ public class InventoryController implements Initializable {
     }
     @FXML
     public void removeButton(ActionEvent event){
-
+        ObservableList<Item> itemSelected = Tableview.getSelectionModel().getSelectedItems();
+        ObservableList<Item> tempItemArray = Tableview.getItems();
+        for(Item i: itemSelected){
+            tempItemArray.remove(i);
+        }
     }
     @FXML
     private void handleButtonEvent(ActionEvent event){
