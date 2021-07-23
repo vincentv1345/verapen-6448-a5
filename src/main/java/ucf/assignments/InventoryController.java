@@ -60,7 +60,7 @@ public class InventoryController implements Initializable {
                 serialNumberIsTheSame.showAndWait();
             }
             else if(name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()){
-
+                isEmpty.showAndWait();
             }
             else if(name.getText().length() > 256 || name.getText().length() < 2){
                 nameSize.showAndWait();
