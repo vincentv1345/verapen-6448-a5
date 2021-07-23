@@ -77,14 +77,30 @@ public class InventoryController implements Initializable {
     }
     @FXML
     void saveFile(ActionEvent actionEvent){
-
         Stage saveStage = new Stage();
         fileChooser.setTitle("Save File");
+        fileChooser.setInitialFileName("savefile");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Html Files", "*.html"));
         try{
             File file = fileChooser.showSaveDialog(saveStage);
+            fileChooser.setInitialDirectory(file.getParentFile());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void loadFile(ActionEvent actionEvent){
+
+        Stage saveStage = new Stage();
+        fileChooser.setTitle("Load File");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Html Files", "*.html"));
+        try{
+            File file = fileChooser.showOpenDialog(saveStage);
             fileChooser.setInitialDirectory(file.getParentFile());
         }
         catch (Exception e){
