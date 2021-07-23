@@ -10,9 +10,11 @@ ucf/assignments/SearchClass.java
  ucf.assignments.SearchClass
 ucf/assignments/SaveLoadFiles.java
  ucf.assignments.SaveLoadFiles
-ucf/assignments/InventoryController.java
- ucf.assignments.InventoryController
-ucf/assignments/Item.java
- ucf.assignments.Item
 ucf/assignments/CheckErrors.java
  ucf.assignments.CheckErrors
+ucf/assignments/Item.java
+ ucf.assignments.Item
+ucf/assignments/changeToCurrency.java
+ ucf.assignments.changeToCurrency
+ucf/assignments/InventoryController.java
+ ucf.assignments.InventoryController

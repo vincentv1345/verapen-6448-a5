@@ -9,6 +9,9 @@ Item = item(Value, SerialNumber, Name);
 removeItem();
 addItem();
 }
+class changeToCurrency{
+changeToCurrency(String x)
+}
 class EditController{
 editSerialNumber(checkItemInput)
 editValue()
@@ -63,4 +66,5 @@ InventoryController <|- EditController
 SaveLoadController <|- SaveLoadFiles
 InventoryController <|- SearchClass
 InventoryController <|- SortItems
+InventoryController <|- changeToCurrency
 @enduml

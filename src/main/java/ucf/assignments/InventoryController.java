@@ -19,9 +19,12 @@ import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class InventoryController implements Initializable {
@@ -43,7 +46,34 @@ public class InventoryController implements Initializable {
     private TextField serialNumber;
     FileChooser fileChooser = new FileChooser();
     List<String> fileNames;
+    changeToCurrency c = new changeToCurrency();
+    @FXML
+    public void handleButton(ActionEvent event){
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        Alert.AlertType alertType = Alert.AlertType.ERROR;
+        Alert serialNumberIsTheSame = new Alert(alertType, "Serial Number is the same");
+        Alert nameSize = new Alert(alertType, "The name is either too small or too big");
+        Alert isEmpty = new Alert(alertType, "The field is empty");
+        ObservableList<Item> tempList = Tableview.getItems();
+        for(int i = 0; i<tempList.size(); i++) {
+            if(tempList.get(i).getSerialNumber() == serialNumber.getText()){
+                serialNumberIsTheSame.showAndWait();
+            }
+            else if(name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()){
 
+            }
+            else if(name.getText().length() > 256 || name.getText().length() < 2){
+                nameSize.showAndWait();
+            }
+
+            else {
+                changeToCurrency c = new changeToCurrency();
+                ObservableList<Item> Item = Tableview.getItems();
+                Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
+                Tableview.getItems().add(inventoryItem);
+            }
+        }
+    }
     @FXML
     void saveFile(ActionEvent actionEvent){
 
@@ -60,7 +90,7 @@ public class InventoryController implements Initializable {
     public void addButton(ActionEvent event){
         try{
             ObservableList<Item> Item = Tableview.getItems();
-            Item inventoryItem = new Item(value.getText(), serialNumber.getText(), name.getText());
+            Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
             Tableview.getItems().add(inventoryItem);
         }
         catch (Exception e){
@@ -74,11 +104,6 @@ public class InventoryController implements Initializable {
         for(Item i: itemSelected){
             tempItemArray.remove(i);
         }
-    }
-    @FXML
-    private void handleButtonEvent(ActionEvent event){
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        Alert.AlertType type = Alert.AlertType.ERROR;
     }
     @FXML
     public ObservableList<Item> getItems(){
@@ -99,7 +124,7 @@ public class InventoryController implements Initializable {
 
         Tableview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         fileNames = new ArrayList<>();
-        fileNames.add(" *.txt");
+        fileNames.add("*.txt");
         fileNames.add("*.json");
         fileNames.add("*.html");
 
