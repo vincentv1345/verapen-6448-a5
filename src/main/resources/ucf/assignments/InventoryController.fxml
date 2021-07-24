@@ -32,17 +32,18 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TableView fx:id="Tableview" layoutY="29.0" prefHeight="298.0" prefWidth="646.0">
+      <TableView fx:id="Tableview" layoutY="69.0" prefHeight="307.0" prefWidth="646.0">
         <columns>
-          <TableColumn fx:id="valueColumn" prefWidth="217.0" text="Value" />
-          <TableColumn fx:id="serialNumberColumn" minWidth="0.0" prefWidth="223.0" text="Serial Number" />
-            <TableColumn fx:id="nameColumn" prefWidth="205.0" text="Name" />
+          <TableColumn fx:id="valueColumn" onEditCommit="#saveEditValue" prefWidth="217.0" text="Value" />
+          <TableColumn fx:id="serialNumberColumn" minWidth="0.0" onEditCommit="#saveEditSerialNumber" prefWidth="223.0" text="Serial Number" />
+            <TableColumn fx:id="nameColumn" onEditCommit="#saveEditName" prefWidth="205.0" text="Name" />
         </columns>
       </TableView>
-      <TextField fx:id="value" layoutX="14.0" layoutY="352.0" promptText="Value" />
-      <TextField fx:id="serialNumber" layoutX="187.0" layoutY="352.0" promptText="Valid Serial Number" />
-      <TextField fx:id="name" layoutX="355.0" layoutY="352.0" promptText="Name" />
-      <Button layoutX="543.0" layoutY="352.0" mnemonicParsing="false" onAction="#addButton" text="Add Item" />
-      <Button layoutX="543.0" layoutY="395.0" mnemonicParsing="false" onAction="#removeButton" text="Remove " />
+      <TextField fx:id="value" layoutX="14.0" layoutY="395.0" promptText="Value" />
+      <TextField fx:id="serialNumber" layoutX="195.0" layoutY="395.0" onAction="#validate" promptText="Valid Serial Number" />
+      <TextField fx:id="name" layoutX="366.0" layoutY="395.0" promptText="Name" />
+      <Button layoutX="565.0" layoutY="382.0" mnemonicParsing="false" onAction="#validate" text="Add Item" />
+      <Button layoutX="566.0" layoutY="408.0" mnemonicParsing="false" onAction="#removeButton" text="Remove " />
+      <TextField fx:id="searchBar" layoutX="419.0" layoutY="35.0" onAction="#searchList" prefHeight="26.0" prefWidth="214.0" promptText="Search" />
    </children>
 </AnchorPane>

@@ -3,6 +3,8 @@ import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +14,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
 import java.awt.*;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.Window;
+
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,8 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 public class InventoryController implements Initializable {
+    @FXML
+    private TextField searchBar;
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -45,37 +51,80 @@ public class InventoryController implements Initializable {
     private TextField name;
     @FXML
     private TextField serialNumber;
-    FileChooser fileChooser = new FileChooser();
-    List<String> fileNames;
-    changeToCurrency c = new changeToCurrency();
     @FXML
-    public void handleButton(ActionEvent event){
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        Alert.AlertType alertType = Alert.AlertType.ERROR;
-        Alert serialNumberIsTheSame = new Alert(alertType, "Serial Number is the same");
-        Alert nameSize = new Alert(alertType, "The name is either too small or too big");
-        Alert isEmpty = new Alert(alertType, "The field is empty");
+    private Button Button;
+    FileChooser fileChooser = new FileChooser();
+    changeToCurrency c = new changeToCurrency();
+
+    public TextField getSearchBar() {
+        return searchBar;
+    }
+    @FXML
+    public void searchList(){
+        FilteredList<Item> filteredList = getFilter();
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> { filteredList.setPredicate(item -> {
+            if (newValue == null || newValue.isEmpty()) {
+                return true;
+            }
+            String toLowerCase = newValue.toLowerCase();
+            //Compares the names of items to each other
+            if (item.getName().toLowerCase().indexOf(toLowerCase) != -1) {
+                return true;
+            } else if (item.getSerialNumber().indexOf(toLowerCase) != -1) {
+                return true;
+            } else {
+                return false;
+            }
+            });
+        });
+        SortedList<Item> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(Tableview.comparatorProperty());
+        Tableview.setItems(sortedList);
+    }
+    @FXML
+    public void validate() {
+        Stage stage = new Stage();
+        Alert serialNumberIsTheSame = new Alert(Alert.AlertType.ERROR);
+        serialNumberIsTheSame.getDialogPane().setContentText("Serial Number is the same. ");
+        Alert nameSize = new Alert(Alert.AlertType.ERROR);
+        nameSize.getDialogPane().setContentText("The name size is too small or too big. ");
+        Alert isEmpty = new Alert(Alert.AlertType.ERROR);
+        isEmpty.setContentText("One of the text boxes are empty. ");
         ObservableList<Item> tempList = Tableview.getItems();
-        try {
-            for (int i = 0; i < tempList.size(); i++) {
-                if (tempList.get(i).getSerialNumber() == serialNumber.getText()) {
-                    serialNumberIsTheSame.showAndWait();
-                } else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()) {
-                    isEmpty.showAndWait();
-                } else if (name.getText().length() > 256 || name.getText().length() < 2) {
-                    nameSize.showAndWait();
-                } else {
-                    changeToCurrency c = new changeToCurrency();
-                    ObservableList<Item> Item = Tableview.getItems();
-                    Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
-                    Tableview.getItems().add(inventoryItem);
-                }
+        for (int i = 0; i < tempList.size(); i++) {
+            if (tempList.get(i).getSerialNumber().equals(serialNumber.getText())) {
+                serialNumberIsTheSame.initModality(Modality.APPLICATION_MODAL);
+                serialNumberIsTheSame.initOwner(stage);
+                serialNumberIsTheSame.showAndWait();
+                return;
+            } else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()) {
+                isEmpty.initModality(Modality.APPLICATION_MODAL);
+                isEmpty.initOwner(stage);
+                isEmpty.showAndWait();
+                return;
+            } else if (name.getText().length() > 256 || name.getText().length() < 2) {
+                nameSize.initModality(Modality.APPLICATION_MODAL);
+                nameSize.initOwner(stage);
+                nameSize.showAndWait();
+                return;
             }
         }
-        catch(Exception e){
-            e.printStackTrace();
-            }
+        Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
+        Tableview.getItems().add(inventoryItem);
+
     }
+    public void handleButton(){
+                    try {
+                        changeToCurrency c = new changeToCurrency();
+                        ObservableList<Item> Item = Tableview.getItems();
+                        Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
+                        Tableview.getItems().add(inventoryItem);
+                    }
+                    catch (Exception e){
+                        System.out.println("Something went wrong");
+                        e.printStackTrace();
+                    }
+        }
     @FXML
     void saveFile(ActionEvent actionEvent){
         Stage saveStage = new Stage();
@@ -98,13 +147,13 @@ public class InventoryController implements Initializable {
     }
     @FXML
     void loadFile(ActionEvent actionEvent){
-        Stage saveStage = new Stage();
+        Stage loadStage = new Stage();
         fileChooser.setTitle("Load File");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Html Files", "*.html"));
         try{
-            File file = fileChooser.showOpenDialog(saveStage);
+            File file = fileChooser.showOpenDialog(loadStage);
             fileChooser.setInitialDirectory(file.getParentFile());
         }
         catch (Exception e){
@@ -112,15 +161,19 @@ public class InventoryController implements Initializable {
         }
     }
     @FXML
-    public void addButton(ActionEvent event){
-        try{
-            ObservableList<Item> Item = Tableview.getItems();
-            Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
-            Tableview.getItems().add(inventoryItem);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
+    public void saveEditName(TableColumn.CellEditEvent<Item, String> editInventory){
+        Item inventoryItem = Tableview.getSelectionModel().getSelectedItem();
+        inventoryItem.setName(editInventory.getNewValue());
+    }
+    @FXML
+    public void saveEditValue(TableColumn.CellEditEvent<Item, String> editInventory){
+        Item inventoryItem = Tableview.getSelectionModel().getSelectedItem();
+        inventoryItem.setValue(editInventory.getNewValue());
+    }
+    @FXML
+    public void saveEditSerialNumber(TableColumn.CellEditEvent<Item, String> editInventory){
+        Item inventoryItem = Tableview.getSelectionModel().getSelectedItem();
+        inventoryItem.setSerialNumber(editInventory.getNewValue());
     }
     @FXML
     public void removeButton(ActionEvent event){
@@ -135,9 +188,13 @@ public class InventoryController implements Initializable {
         ObservableList<Item> Item = FXCollections.observableArrayList();
         return Item;
     }
+    @FXML
+    public FilteredList<Item> getFilter(){
+        FilteredList<Item> filteredList = new FilteredList<>(Tableview.getItems(), b -> true);
+        return filteredList;
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         valueColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("value"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("serialNumber"));
