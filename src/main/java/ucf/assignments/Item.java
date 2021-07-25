@@ -43,4 +43,8 @@ public class Item extends TextField {
         this.serialNumber = new SimpleStringProperty(serialNumber);
         this.name = new SimpleStringProperty(name);
     }
+    @Override
+    public String toString(){
+        return String.format("%-6s %-6s " + "\t \t|" + "%-6s " + "\t \t|"+"%-6s ", value, serialNumber, name);
+    }
 }

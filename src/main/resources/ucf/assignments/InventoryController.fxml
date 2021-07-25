@@ -44,6 +44,6 @@
       <TextField fx:id="name" layoutX="366.0" layoutY="395.0" promptText="Name" />
       <Button layoutX="565.0" layoutY="382.0" mnemonicParsing="false" onAction="#validate" text="Add Item" />
       <Button layoutX="566.0" layoutY="408.0" mnemonicParsing="false" onAction="#removeButton" text="Remove " />
-      <TextField fx:id="searchBar" layoutX="419.0" layoutY="35.0" onAction="#searchList" prefHeight="26.0" prefWidth="214.0" promptText="Search" />
+      <TextField fx:id="searchBar" layoutX="110.0" layoutY="35.0" prefHeight="26.0" prefWidth="523.0" promptText="Search" />
    </children>
 </AnchorPane>
