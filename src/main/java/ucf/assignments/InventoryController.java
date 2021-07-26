@@ -8,6 +8,8 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -58,11 +60,14 @@ public class InventoryController implements Initializable {
     SearchClass s = new SearchClass();
     SaveLoadFiles sl = new SaveLoadFiles();
     private ObservableList<Item> finalList = FXCollections.observableArrayList();
-    List<Item> inventoryList = finalList.stream().collect(Collectors.toList());
-    ArrayList<Item> arrayInventoryList = new ArrayList<Item>(inventoryList);
     @FXML
     public void validate(ActionEvent event) {
-        Window stage = new Stage();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(new Group(), 300, 300));
+        Alert valueIsNotNumber = new Alert(Alert.AlertType.ERROR);
+        valueIsNotNumber.getDialogPane().setContentText("Value is is not a number");
+        Alert serialNumberIsNotNumber = new Alert(Alert.AlertType.ERROR);
+        serialNumberIsNotNumber.getDialogPane().setContentText("Serial Number contains special Characters");
         Alert serialNumberIsTheSame = new Alert(Alert.AlertType.ERROR);
         serialNumberIsTheSame.getDialogPane().setContentText("Serial Number is the same. ");
         Alert nameSize = new Alert(Alert.AlertType.ERROR);
@@ -70,12 +75,17 @@ public class InventoryController implements Initializable {
         Alert isEmpty = new Alert(Alert.AlertType.ERROR);
         isEmpty.getDialogPane().setContentText("One of the text boxes are empty. ");
         ObservableList<Item> tempList = Tableview.getItems();
-        for (int i = 0; i < tempList.size(); i++) {
-            if (tempList.get(i).getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 6) {
+        for (Item item : Tableview.getItems()) {
+            if (item.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 10 || serialNumber.getText().length() < 10) {
                 serialNumberIsTheSame.initModality(Modality.APPLICATION_MODAL);
                 serialNumberIsTheSame.initOwner(stage);
                 serialNumberIsTheSame.showAndWait();
                 return;
+            }
+            else if(!item.getSerialNumber().matches("[^A-Za-z0-9]")){
+                serialNumberIsNotNumber.initModality(Modality.APPLICATION_MODAL);
+                serialNumberIsNotNumber.initOwner(stage);
+                serialNumberIsNotNumber.showAndWait();
             } else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()) {
                 isEmpty.initModality(Modality.APPLICATION_MODAL);
                 isEmpty.initOwner(stage);
@@ -87,6 +97,12 @@ public class InventoryController implements Initializable {
                 nameSize.showAndWait();
                 return;
             }
+            else if(!value.getText().matches("\\d+")){
+                valueIsNotNumber.initModality(Modality.APPLICATION_MODAL);
+                valueIsNotNumber.initOwner(stage);
+                valueIsNotNumber.showAndWait();
+                return;
+            }
         }
         Item inventoryItem = new Item(c.changeToCurrency(value.getText()), serialNumber.getText(), name.getText());
         Tableview.getItems().add(inventoryItem);
@@ -94,6 +110,14 @@ public class InventoryController implements Initializable {
     @FXML
     void saveFile(ActionEvent actionEvent){
         Stage saveStage = new Stage();
+        Item item = new Item();
+        List<Item> inventoryList = new ArrayList<>();
+        for(int i = 0; i<Tableview.getItems().size(); i++){
+            item = Tableview.getItems().get(i);
+            inventoryList.add(item);
+            System.out.println(inventoryList.get(i).getName());
+        }
+
         fileChooser.setTitle("Save File");
         fileChooser.setInitialFileName("savefile");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TSV Files", "*.txt"));
@@ -103,10 +127,10 @@ public class InventoryController implements Initializable {
             File file = fileChooser.showSaveDialog(saveStage);
             fileChooser.setInitialDirectory(file.getParentFile());
             if(file != null && file.getAbsolutePath().endsWith(".txt")){
-                sl.saveTextFile(file, arrayInventoryList);
+                sl.saveTextFile(file, inventoryList);
             }
             else if(file != null && file.getAbsolutePath().endsWith(".html")){
-                sl.saveHTMLFile(file, arrayInventoryList);
+                sl.saveHTMLFile(file, inventoryList);
             }
         }
         catch (Exception e){
@@ -178,25 +202,22 @@ public class InventoryController implements Initializable {
         Tableview.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         finalList.addAll(Tableview.getItems());
         List<Item> inventoryList = finalList.stream().collect(Collectors.toList());
-        ArrayList<Item> arrayInventoryList = new ArrayList<Item>(inventoryList);
         FilteredList<Item> filteredList = new FilteredList<>(finalList, b -> true);
-        searchBar.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredList.setPredicate(item -> {
-                if(newValue == null || newValue.isEmpty()){
-                    return true;
-                }
-                String lowerCase = newValue.toLowerCase();
-                if(item.getSerialNumber().toLowerCase().indexOf(lowerCase) != -1){
-                    return true;
-                }
-                else if(item.getName().toLowerCase().indexOf(lowerCase) != -1) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            });
-        });
+        searchBar.textProperty().addListener((observable, oldValue, newValue) -> filteredList.setPredicate(item -> {
+            if(newValue == null || newValue.isEmpty()){
+                return true;
+            }
+            String lowerCase = newValue.toLowerCase();
+            if(item.getSerialNumber().toLowerCase().indexOf(lowerCase) != -1){
+                return true;
+            }
+            else if(item.getName().toLowerCase().indexOf(lowerCase) != -1) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }));
         /*
         SortedList<Item> newSortedList = new SortedList<>(filteredList);
         Tableview.setItems(newSortedList);*/

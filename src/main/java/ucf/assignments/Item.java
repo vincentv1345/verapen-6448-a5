@@ -27,13 +27,12 @@ public class Item extends TextField {
     public void setSerialNumber(String serialNumber) {
         this.serialNumber.set(serialNumber);
     }
+    public String getName() {
+        return name.get();
+    }
     public SimpleStringProperty nameProperty(){
         return name;
     }
-    public String getName() {
-        return name.getName();
-    }
-
     public void setName(String name) {
         this.name.set(name);
     }
@@ -42,6 +41,8 @@ public class Item extends TextField {
         this.value = new SimpleStringProperty(value);
         this.serialNumber = new SimpleStringProperty(serialNumber);
         this.name = new SimpleStringProperty(name);
+    }
+    public Item(){
     }
     @Override
     public String toString(){

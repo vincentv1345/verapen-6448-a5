@@ -4,15 +4,13 @@ ucf/assignments/SortClass.java
  ucf.assignments.SortClass
 ucf/assignments/changeToCurrency.java
  ucf.assignments.changeToCurrency
-ucf/assignments/SearchClass.java
- ucf.assignments.SearchClass
-ucf/assignments/SaveLoadController.java
- ucf.assignments.SaveLoadController
+ucf/assignments/InventoryController.java
+ ucf.assignments.InventoryController
 ucf/assignments/Item.java
  ucf.assignments.Item
 ucf/assignments/CheckErrors.java
  ucf.assignments.CheckErrors
 ucf/assignments/SaveLoadFiles.java
  ucf.assignments.SaveLoadFiles
-ucf/assignments/InventoryController.java
- ucf.assignments.InventoryController
+ucf/assignments/SearchClass.java
+ ucf.assignments.SearchClass
