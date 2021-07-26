@@ -14,5 +14,18 @@ public class CheckErrors {
         }
         return check;
     }
-
+    public Boolean checkSerialLen(String x){
+        Boolean check = false;
+        if(x.length()<10 || x.length() > 10){
+            check = true;
+        }
+        return check;
+    }
+    public boolean checkNameLen(String x){
+        Boolean check = false;
+        if(x.length() < 2 || x.length() > 256){
+            check = true;
+        }
+        return check;
+    }
 }
