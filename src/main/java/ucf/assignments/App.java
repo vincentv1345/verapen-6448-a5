@@ -1,6 +1,9 @@
 package ucf.assignments;
 import static javafx.application.Application.launch;
-
+/*
+ *  UCF COP3330 Summer 2021 Assignment 5 Solution
+ *  Copyright 2021 Vincent Verapen
+ */
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.fxml.FXMLLoader;

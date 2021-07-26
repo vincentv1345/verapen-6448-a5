@@ -59,6 +59,7 @@ public class InventoryController implements Initializable {
     changeToCurrency c = new changeToCurrency();
     SearchClass s = new SearchClass();
     SaveLoadFiles sl = new SaveLoadFiles();
+    CheckErrors ch = new CheckErrors();
     private ObservableList<Item> finalList = FXCollections.observableArrayList();
     @FXML
     public void validate(ActionEvent event) {
@@ -66,27 +67,21 @@ public class InventoryController implements Initializable {
         stage.setScene(new Scene(new Group(), 300, 300));
         Alert valueIsNotNumber = new Alert(Alert.AlertType.ERROR);
         valueIsNotNumber.getDialogPane().setContentText("Value is is not a number");
-        Alert serialNumberIsNotNumber = new Alert(Alert.AlertType.ERROR);
-        serialNumberIsNotNumber.getDialogPane().setContentText("Serial Number contains special Characters");
         Alert serialNumberIsTheSame = new Alert(Alert.AlertType.ERROR);
-        serialNumberIsTheSame.getDialogPane().setContentText("Serial Number is the same. ");
+        serialNumberIsTheSame.getDialogPane().setContentText("Serial Number doesn't meet requirements. ");
         Alert nameSize = new Alert(Alert.AlertType.ERROR);
         nameSize.getDialogPane().setContentText("The name size is too small or too big. ");
         Alert isEmpty = new Alert(Alert.AlertType.ERROR);
         isEmpty.getDialogPane().setContentText("One of the text boxes are empty. ");
         ObservableList<Item> tempList = Tableview.getItems();
         for (Item item : Tableview.getItems()) {
-            if (item.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 10 || serialNumber.getText().length() < 10) {
+            if (item.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 10 || serialNumber.getText().length() < 10){
                 serialNumberIsTheSame.initModality(Modality.APPLICATION_MODAL);
                 serialNumberIsTheSame.initOwner(stage);
                 serialNumberIsTheSame.showAndWait();
                 return;
             }
-            else if(!item.getSerialNumber().matches("[^A-Za-z0-9]")){
-                serialNumberIsNotNumber.initModality(Modality.APPLICATION_MODAL);
-                serialNumberIsNotNumber.initOwner(stage);
-                serialNumberIsNotNumber.showAndWait();
-            } else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty()) {
+            else if (name.getText().isEmpty() || serialNumber.getText().isEmpty() || name.getText().isEmpty() || ch.checkIf(name.getText()) == true) {
                 isEmpty.initModality(Modality.APPLICATION_MODAL);
                 isEmpty.initOwner(stage);
                 isEmpty.showAndWait();
@@ -115,7 +110,6 @@ public class InventoryController implements Initializable {
         for(int i = 0; i<Tableview.getItems().size(); i++){
             item = Tableview.getItems().get(i);
             inventoryList.add(item);
-            System.out.println(inventoryList.get(i).getName());
         }
 
         fileChooser.setTitle("Save File");
@@ -152,8 +146,12 @@ public class InventoryController implements Initializable {
             File file = fileChooser.showOpenDialog(loadStage);
             if(file != null){
                 Scanner scanner = new Scanner(System.in);
-                while(scanner.hasNextLine()){
-
+                if(file != null && file.getAbsolutePath().endsWith(".txt")){
+                    ObservableList<Item> tempList = FXCollections.observableArrayList(sl.openTextFile(file));
+                        Tableview.setItems(tempList);
+                }
+                else if(file != null && file.getAbsolutePath().endsWith(".html")){
+                    sl.openHTMLFile(file);
                 }
             }
         }
@@ -174,6 +172,16 @@ public class InventoryController implements Initializable {
     @FXML
     public void saveEditSerialNumber(TableColumn.CellEditEvent<Item, String> editInventory){
         Item inventoryItem = Tableview.getSelectionModel().getSelectedItem();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(new Group(), 300, 300));
+        Alert serialNumberIsTheSame = new Alert(Alert.AlertType.ERROR);
+        serialNumberIsTheSame.getDialogPane().setContentText("Serial Number doesn't meet requirements. ");
+            if(inventoryItem.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 10 || serialNumber.getText().length() < 10) {
+                serialNumberIsTheSame.initModality(Modality.APPLICATION_MODAL);
+                serialNumberIsTheSame.initOwner(stage);
+                serialNumberIsTheSame.showAndWait();
+                return;
+            }
         inventoryItem.setSerialNumber(editInventory.getNewValue());
     }
     @FXML

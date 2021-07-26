@@ -1,2 +1,4 @@
 ucf/assignments/changeToCurrencyTest.java
  ucf.assignments.changeToCurrencyTest
+ucf/assignments/CheckErrorsTest.java
+ ucf.assignments.CheckErrorsTest
