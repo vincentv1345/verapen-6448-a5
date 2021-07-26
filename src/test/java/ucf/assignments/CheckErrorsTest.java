@@ -20,10 +20,10 @@ class CheckErrorsTest {
         String z = "12345678901";
         boolean f = c.checkSerialLen(x);
         boolean g= c.checkSerialLen(y);
-
+        boolean h = c.checkSerialLen(z);
         assertEquals(true, f);
         assertEquals(false, g);
-        assertEquals(false, g);
+        assertEquals(true, h);
     }
 
     @Test
