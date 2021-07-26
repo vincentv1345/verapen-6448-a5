@@ -6,16 +6,19 @@ class Main{
 }
 class InventoryController{
 Item = item(Value, SerialNumber, Name);
+saveFile()
+loadFile()
+void close()
+void validate()
+saveEditItemSerialNumber()
+saveEditItemName()
+saveEditItemValue()
+void initialize()
 removeItem();
 addItem();
 }
 class changeToCurrency{
 changeToCurrency(String x)
-}
-class EditController{
-editSerialNumber(checkItemInput)
-editValue()
-editName(2,256)
 }
 class ItemClass{
 private String value;
@@ -41,18 +44,9 @@ class SaveLoadController{
  SaveLoadFiles saveAsJSON()
 }
 class CheckErrors{
-public void checkItemInput()
-for(all itemsInInventory){
-if{itemSerialNumber == enterNumber}
-return errorMessage}
-}
-class SortItems{
-sortByName()
-sortBySerialNumber()
-sortByValue()
+boolean checkIf(String x)
 }
 class SaveLoadFiles{
-saveAsJSON(nameOfFile)
 saveAsHTML(nameOfFile)
 saveAsTSV(nameOfFile)
 load()
@@ -62,9 +56,7 @@ Main <|- InventoryController
 InventoryController <|- ItemClass
 InventoryController <|- SaveLoadController
 InventoryController <|- CheckErrors
-InventoryController <|- EditController
 SaveLoadController <|- SaveLoadFiles
 InventoryController <|- SearchClass
-InventoryController <|- SortItems
 InventoryController <|- changeToCurrency
 @enduml
