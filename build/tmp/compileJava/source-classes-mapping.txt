@@ -8,7 +8,7 @@ ucf/assignments/changeToCurrency.java
  ucf.assignments.changeToCurrency
 ucf/assignments/SearchClass.java
  ucf.assignments.SearchClass
-ucf/assignments/InventoryController.java
- ucf.assignments.InventoryController
 ucf/assignments/CheckErrors.java
  ucf.assignments.CheckErrors
+ucf/assignments/InventoryController.java
+ ucf.assignments.InventoryController

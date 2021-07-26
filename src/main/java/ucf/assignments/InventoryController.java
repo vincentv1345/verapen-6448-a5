@@ -75,7 +75,7 @@ public class InventoryController implements Initializable {
         isEmpty.getDialogPane().setContentText("One of the text boxes are empty. ");
         ObservableList<Item> tempList = Tableview.getItems();
         for (Item item : Tableview.getItems()) {
-            if (item.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length() > 10 || serialNumber.getText().length() < 10){
+            if (item.getSerialNumber().equals(serialNumber.getText()) || serialNumber.getText().length()<10 || serialNumber.getText().length() < 10){
                 serialNumberIsTheSame.initModality(Modality.APPLICATION_MODAL);
                 serialNumberIsTheSame.initOwner(stage);
                 serialNumberIsTheSame.showAndWait();
